@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT2 Chat</title>
+
+    <style>
+				html, body {
+				  height: 100%;
+				}
+
+				html {
+				  display: table;
+				  margin: auto;
+				}
+
+				body {
+					max-width: 800px;
+				  display: table-cell;
+				  vertical-align: middle;
+				}
+    </style>
+</head>
+<body>
+	<form action="" onsubmit="sendMessage(event)">
+      <input type="text" id="messageText" autocomplete="off"/>
+      <button>Send</button>
+   </form>
+
+  <div id="chat">
+	  <ul id='conversation'>
+	  </ul>
+	</div>
+
+	<script>
+		let ws = new WebSocket("ws://localhost:8000/ws");
+    ws.onmessage = function(event) {
+     	let messages = document.getElementById('conversation');
+    	let message = document.createElement('li');
+    	message.style.color = '#2a2a2a';
+
+      let content = event.data.replace(/\n/g, "<br>").replace('<|endoftext|>', "<br>");
+      message.innerHTML = content;
+      messages.appendChild(message);
+   	};
+
+    function sendMessage(event) {
+     	let input = document.getElementById("messageText");
+
+     	let questions = document.getElementById('conversation');
+    	let message = document.createElement('li');
+    	message.style.color = '#7f7f7f';
+
+      let content = document.createTextNode(`Prompt: ${input.value}`);
+      message.appendChild(content);
+      questions.appendChild(message);
+
+   		ws.send(input.value);
+      input.value = '';
+      event.preventDefault();
+    }
+	</script>
+</body>
+</html>
