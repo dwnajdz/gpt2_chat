@@ -10,5 +10,5 @@ Simple html chat interface with GPT2 model downloaded locally from huggingface.
 
 ### 2
 
-`./start.s`
+`./start.sh`
 
